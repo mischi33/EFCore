@@ -17,7 +17,9 @@ namespace App.Data
         {
             // tell ef core to use sqlserver and pass the corresponding connectionstring
             optionsBuilder
-                .UseSqlServer("Server=localhost,1433;Initial Catalog=SamuraiAppData;User ID=sa;Password=Test123!")
+                .UseSqlServer("Server=localhost,1433;Initial Catalog=SamuraiAppData;User ID=sa;Password=Test123!",
+                    options => options.MaxBatchSize(100)
+                )
                 // Logs to console
                 .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
                 // Log to a file
