@@ -1,5 +1,7 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using App.Domain;
+using Microsoft.Extensions.Logging;
 
 namespace App.Data
 {
@@ -9,10 +11,18 @@ namespace App.Data
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Battle> Battles { get; set; }
 
+        private StreamWriter _writer = new StreamWriter("../EFCoreLog.txt", append: true);
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // tell ef core to use sqlserver and pass the corresponding connectionstring
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Initial Catalog=SamuraiAppData;User ID=sa;Password=Test123!");
+            optionsBuilder
+                .UseSqlServer("Server=localhost,1433;Initial Catalog=SamuraiAppData;User ID=sa;Password=Test123!")
+                // Logs to console
+                .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
+                // Log to a file
+                // .LogTo(_writer.WriteLine);
+                .EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
