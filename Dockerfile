@@ -12,6 +12,3 @@ COPY . /usr/src/app
 RUN chmod +x /usr/src/app/run-initialization.sh
 
 CMD /bin/bash ./entrypoint.sh
-
-# docker build -t db-snackmachine .
-# docker run -p 1433:1433 -d db-snackmachine
