@@ -43,6 +43,10 @@ namespace App.Data
             // next two lines: tell ef core to infer the DateJoined column in the BattleSamurai table with default getdate
             .Property(bs => bs.DateJoined)
             .HasDefaultValueSql("getdate()");
+
+            // Horse has no DbSet in this context so ef core takes the property name inside Samurai class for the db table
+            // This overrides the default for the table name to use "Horses" instead of "Horse"
+            modelBuilder.Entity<Horse>().ToTable("Horses");
         }
     }
 }

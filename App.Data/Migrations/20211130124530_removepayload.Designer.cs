@@ -4,6 +4,7 @@ using App.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
-    partial class SamuraiContextModelSnapshot : ModelSnapshot
+    [Migration("20211130124530_removepayload")]
+    partial class removepayload
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,26 +47,6 @@ namespace App.Data.Migrations
                     b.ToTable("Battles");
                 });
 
-            modelBuilder.Entity("App.Domain.BattleSamurai", b =>
-                {
-                    b.Property<int>("BattleId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SamuraiId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateJoined")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.HasKey("BattleId", "SamuraiId");
-
-                    b.HasIndex("SamuraiId");
-
-                    b.ToTable("BattleSamurai");
-                });
-
             modelBuilder.Entity("App.Domain.Horse", b =>
                 {
                     b.Property<int>("Id")
@@ -85,7 +67,7 @@ namespace App.Data.Migrations
                     b.HasIndex("SamuraiId")
                         .IsUnique();
 
-                    b.ToTable("Horses", (string)null);
+                    b.ToTable("Horse");
                 });
 
             modelBuilder.Entity("App.Domain.Quote", b =>
@@ -127,19 +109,19 @@ namespace App.Data.Migrations
                     b.ToTable("Samurais");
                 });
 
-            modelBuilder.Entity("App.Domain.BattleSamurai", b =>
+            modelBuilder.Entity("BattleSamurai", b =>
                 {
-                    b.HasOne("App.Domain.Battle", null)
-                        .WithMany()
-                        .HasForeignKey("BattleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("BattlesBattleId")
+                        .HasColumnType("int");
 
-                    b.HasOne("App.Domain.Samurai", null)
-                        .WithMany()
-                        .HasForeignKey("SamuraiId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("SamuraisId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BattlesBattleId", "SamuraisId");
+
+                    b.HasIndex("SamuraisId");
+
+                    b.ToTable("BattleSamurai");
                 });
 
             modelBuilder.Entity("App.Domain.Horse", b =>
@@ -160,6 +142,21 @@ namespace App.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Samurai");
+                });
+
+            modelBuilder.Entity("BattleSamurai", b =>
+                {
+                    b.HasOne("App.Domain.Battle", null)
+                        .WithMany()
+                        .HasForeignKey("BattlesBattleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.Domain.Samurai", null)
+                        .WithMany()
+                        .HasForeignKey("SamuraisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("App.Domain.Samurai", b =>
