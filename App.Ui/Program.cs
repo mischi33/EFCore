@@ -127,5 +127,22 @@ namespace App.Ui
             // And you can also call it on the context directly to delete multiple different types ob objects
             _context.SaveChanges();
         }
+
+        private static void QueryAndUpdateBattles_Disconnected() {
+            List<Battle> disconnectedBattles;
+            using (var context1 = new SamuraiContext()) {
+                disconnectedBattles = _context.Battles.ToList();
+            } // context1 is disposed
+
+            disconnectedBattles.ForEach(b => {
+                b.StartDate = new DateTime(1570, 01, 01);
+                b.EndDate = new DateTime(1570, 12, 1);
+            });
+
+            using (var context2 = new SamuraiContext()) {
+                context2.UpdateRange(disconnectedBattles);
+                context2.SaveChanges();
+            }
+        }
     }
 }

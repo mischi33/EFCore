@@ -1,7 +1,11 @@
 ### Entity Framework Core Demo App
-## Start DB
+## Build DB Docker image
+This command also creates a database with the name "SamuraiAppData"
 ```
 docker build -t <docker image name> .
+```
+## Start DB
+```
 docker run -p 1433:1433 -d <docker image name>
 ```
 
